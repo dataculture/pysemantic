@@ -529,11 +529,11 @@ class SeriesValidator(HasTraits):
 
     @cached_property
     def _get_minimum(self):
-        return self.rules.get("min", -np.inf)
+        return self.rules.get("minimum", -np.inf)
 
     @cached_property
     def _get_maximum(self):
-        return self.rules.get("max", np.inf)
+        return self.rules.get("maximum", np.inf)
 
     @cached_property
     def _get_regex(self):

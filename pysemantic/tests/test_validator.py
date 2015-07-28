@@ -502,6 +502,15 @@ class TestSeriesValidator(BaseTestCase):
         cleaned = validator.clean()
         self.assertSeriesEqual(cleaned, self.dataframe['Sepal Length'])
 
+    def test_min_max_rules_timeseries(self):
+        """Test if min max specifications work on timeseries data."""
+        series = pd.Series(pd.date_range(start='2015-01-01', end='2015-12-31'))
+        rules = {'min': '2015-03-01', 'max': '2015-08-31'}
+        validator = SeriesValidator(data=series, rules=rules)
+        cleaned = validator.clean()
+        self.assertGreaterEqual(cleaned.min(), pd.to_datetime('2015-03-01'))
+        self.assertLessEqual(cleaned.max(), pd.to_datetime('2015-08-31'))
+
     def test_min_max_rules(self):
         """Test if the validator enforces min and max values from schema."""
         self.sepal_length_rules['min'] = 5.0

@@ -12,7 +12,6 @@ import copy
 import cPickle
 import json
 import logging
-import datetime
 import textwrap
 import warnings
 import os.path as op
@@ -21,6 +20,7 @@ import yaml
 import numpy as np
 import pandas as pd
 from pandas.io.parsers import ParserWarning
+from pandas.core.common import is_datetimelike
 from pandas.parser import CParserError
 from traits.api import (HasTraits, File, Property, Str, Dict, List, Type,
                         Bool, Either, push_exception_handler, cached_property,
@@ -485,7 +485,7 @@ class SeriesValidator(HasTraits):
 
     def apply_minmax_rules(self):
         """Restrict the series to the minimum and maximum from the schema."""
-        if self.data.dtype in (int, float, datetime.date):
+        if (self.data.dtype in (int, float)) or is_datetimelike(self.data):
             if self.minimum != -np.inf:
                 logger.info("Setting minimum at {0}".format(self.minimum))
                 self.data = self.data[self.data >= self.minimum]
